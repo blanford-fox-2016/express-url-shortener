@@ -70,6 +70,7 @@ router.post('/urls', (req, res,next) => {
 
 
 router.get('/:short_urls', (req, res, next) => {
+  console.log(req.params.short_urls);
   res.redirect('/')
 })
 

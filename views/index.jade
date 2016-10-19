@@ -32,4 +32,5 @@ block content
           tr
           td #{database[i].id}
           td #{database[i].urls}
-          td short.id/#{database[i].short_url}
+          td
+            a(href="#{database[i].urls}") short.id/#{database[i].short_url}
