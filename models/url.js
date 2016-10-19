@@ -1,4 +1,5 @@
 'use strict';
+
 module.exports = function(sequelize, DataTypes) {
   var Url = sequelize.define('Url', {
     long: DataTypes.STRING,
