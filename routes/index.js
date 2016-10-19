@@ -60,13 +60,26 @@ router.get('/:shortlink', (req, res, next) => {
   shortlink.findOne({
     where: {
       shortlink: req.params.shortlink
-    },
-    attributes: ['originallink']
+    }
   }).then((data, err) => {
     if (err) {
       console.log(err);
     } else {
-      shortlink.update
+      // res.send(data.shortlink)
+      res.redirect(data.originallink)
+      shortlink.update({
+        visitedtimes: data.visitedtimes + 1
+      }, {
+        where: {
+          shortlink: data.shortlink
+        }
+      }).then((data,err) => {
+        if (err) {
+          console.log(err);
+        } else {
+          res.redirect(data.originallink);
+        }
+      })
     }
   });
 });
