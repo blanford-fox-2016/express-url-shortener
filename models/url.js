@@ -7,7 +7,8 @@ module.exports = function(sequelize, DataTypes) {
         isUrl: true
       }
     },
-    short_url: DataTypes.STRING
+    short_url: DataTypes.STRING,
+    count: DataTypes.INTEGER
   }, {
     classMethods: {
       associate: function(models) {

@@ -42,24 +42,25 @@ router.post('/urls', (req, res,next) => {
         urls: input_url
       }
     }).then((data) => {
-      // res.render('index', {title: 'Shorten URL', find_short_url: data.short_url})
-      Urls.findAll().then((all_data) => {
-        console.log(data.short_url);
-        res.render('index', { title: 'Shorten URL', find_short_url: data.short_url, database: all_data});
-      })
+      res.render('index', {title: 'Shorten URL', find_short_url: data.short_url})
+      // Urls.findAll().then((all_data) => {
+      //   console.log(data.short_url);
+      //   res.render('index', { title: 'Shorten URL', find_short_url: data.short_url, database: all_data});
+      // })
     }).catch(()=> {
         Urls.create({
+          count: 0,
           urls: input_url
         }).then((new_data) => {
           console.log(`Insert Data Success`);
           console.log(new_data.short_url)
-          res.redirect(`/${new_data.short_url}`)
+          res.redirect(`/`)
         }).catch((err) => {
           console.log(`not link`);
-          Urls.findAll().then((all_data) => {
-            res.render('index', { title: 'Shorten URL', error: "Input must link", database: all_data});
-          })
-          // res.render('index', {title: 'Shorten URL', error: "Input must link"})
+          // Urls.findAll().then((all_data) => {
+          //   res.render('index', { title: 'Shorten URL', error: "Input must link", database: all_data});
+          // })
+          res.render('index', {title: 'Shorten URL', error: "Input must link"})
           // res.redirect('/')
         })
     })
@@ -67,11 +68,26 @@ router.post('/urls', (req, res,next) => {
   }
 })
 
-
-
 router.get('/:short_urls', (req, res, next) => {
-  console.log(req.params.short_urls);
-  res.redirect('/')
+  // console.log(req.params.short_urls);
+  Urls.findOne({
+    where: {
+      short_url: req.params.short_urls
+    }
+  }).then((data) => {
+    // console.log(data.count);
+    data.count++
+    Urls.update({
+      count: data.count
+    },{
+      where: {
+        id: data.id
+      }
+    }).then((data_update) => {
+      // console.log(data_update);
+    })
+    res.redirect(`http://${data.urls}`)
+  })
 })
 
 module.exports = router;

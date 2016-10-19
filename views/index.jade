@@ -8,7 +8,7 @@ block content
   form(action="/urls", method="post", name="form_url", class="col s12")
     .row
       .input-field.col.s4.col.s4
-      input(type="text", name="input_url", placeholder="Paste a link to shorten it", class="col s4 col s4", value="#{typeof find_short_url != 'undefined' ? 'short.id/'+find_short_url: ''}")
+      input(type="text", name="input_url", placeholder="Paste a link to shorten it", class="col s4 col s4", value="#{typeof find_short_url != 'undefined' ? 'Your Link: short.id/'+find_short_url: ''}")
       br
     .row
       .col.s4.col.s4
@@ -18,19 +18,25 @@ block content
         p
     .row
       .input-field.col.s12
-      input(type="submit", value="Shorten", class="btn waves-effect waves-light")
+        if typeof find_short_url == 'undefined'
+          input(type="submit", value="Shorten", class="btn waves-effect waves-light")
+        else
+          a(href="/", class="btn waves-effect waves-light") Back
   br
   br
   if typeof database != 'undefined'
-    div.col.s12
-      table.bordered.col.s4
-        tr
-          th#id ID
-          th#urls Urls
-          th#short_url short_url
-        - for (var i = 0 ; i < database.length ; i++ )
+    .container
+      div.col.s12
+        table.bordered.col.s4
           tr
-          td #{database[i].id}
-          td #{database[i].urls}
-          td
-            a(href="#{database[i].urls}") short.id/#{database[i].short_url}
+            th#id ID
+            th#urls Urls
+            th#short_url short_url
+            th#count count
+          - for (var i = 0 ; i < database.length ; i++ )
+            tr
+            td #{database[i].id}
+            td #{database[i].urls}
+            td
+              a(href="/#{database[i].short_url}", target="_blank") short.id/#{database[i].short_url}
+            td #{database[i].count}
