@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+
+    <div>
+      <p>Daftar link yang tersimpan</p>
+      <table style="border: 1px solid black;">
+        <tr>
+        <td>Id.</td>
+        <td>Long URL</td>
+        <td>Short URL</td>
+        <td>Count</td>
+        </tr>
+
+        <% for (var i = 0; i < data.length; i++) {%>
+          <tr>
+            <td><%= data[i].id%></td>
+            <td><%= data[i].long_url%></td>
+            <td><a href="/update/<%=data[i].id%>/<%=data[i].long_url%>"><%= data[i].short_url%></a></td>
+            <td><%= data[i].count%></td>
+          </tr>
+        <% } %>
+      </table>
+    </div>
+
+    <div style="padding-top: 20px">
+      <form action="/urls" method="post" >
+        <label>Input URL</label>
+        <input type="text" name="url">
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+
+    <div style="padding-top: 20px">
+      <%if (typeof short_url != "undefined") {%>
+        <p>short url: <%= short_url%></p>
+      <%}%>
+    </div>
+  </body>
+</html>
