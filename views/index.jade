@@ -1,32 +1,30 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
-  br
-  br
-  form(action="/urls", method="post", name="form_url", class="col s12")
-    .row
-      .input-field.col.s4.col.s4
-      input(type="text", name="input_url", placeholder="Paste a link to shorten it", class="col s4 col s4", value="#{typeof find_short_url != 'undefined' ? 'This is your Link: short.id/'+find_short_url: ''}")
-      br
-    .row
-      .col.s4.col.s4
-      if error
-        p.error.col.s4.col.s4 #{error}
-      else
-        p
-    .row
-      .input-field.col.s12
-        if typeof find_short_url == 'undefined'
-          input(type="submit", value="Shorten", class="btn waves-effect waves-light")
+  .container
+    h1= title
+    p Welcome to #{title}
+    br
+    br
+    form(action="/urls", method="post", name="form_url", class="col s12")
+      .row
+        .input-field.col.s4.col.s4
+        input(type="text", name="input_url", placeholder="Paste a link to shorten it", class="col s4 col s4", value="#{typeof find_short_url != 'undefined' ? 'This is your Link: short.id/'+find_short_url : ''}")
+      .row
+        .col.s4.col.s4
+        if error
+          p.error.col.s4.col.s4 #{error}
         else
-          a(href="/", class="btn waves-effect waves-light") Back
-  br
-  br
-  if typeof database != 'undefined'
-    .container
-      div.col.s12
+          p
+      .row
+        .input-field.col.s12
+          if typeof find_short_url == 'undefined'
+            input(type="submit", value="Shorten", class="btn waves-effect waves-light")
+          else
+            a(href="/", class="btn waves-effect waves-light") Back
+    br
+    if database.length > 0
+      .container
         table.bordered.col.s4
           tr
             th#id ID
