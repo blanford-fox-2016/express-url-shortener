@@ -3,3 +3,10 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
+  form#form(method='post', action='/urls')
+    | Url yang ingin diperpendek
+    input(type='text', name='url', value='')
+    br
+    br
+    input(type='submit', value='Submit')
+  p url yang main diperpendek adalah "#{url}" dan diperpendek menjadi:   
