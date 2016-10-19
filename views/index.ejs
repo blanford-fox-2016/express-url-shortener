@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+  <form method="post" action="/url">
+    <input type="text" name="url" placeholder="url"></input>
+    <button type="submit">Submit</button>
+  </form>
+
+  <%if(typeof shorten_url != 'undefined'){%>
+
+    <table style="width:100%">
+  <tr>
+    <td>Id</td>
+    <td>Old Link</td>
+    <td>New Link</td>
+    <td>Count</td>
+  </tr>
+<%for(var i=0;i<shorten_url.length;i++){%>
+  <tr>
+    <td><%= shorten_url[i].id %></td>
+    <td><a href='<%= shorten_url[i].old_link %>'><%= shorten_url[i].old_link %> </a></td>
+    <td><a href='<%= shorten_url[i].new_link %>'><%= shorten_url[i].new_link %> </a></td>
+    <td><%= shorten_url[i].count %></td>
+  </tr>
+
+        <%}%>
+        </table>
+  <%}%>
+
+
+  </body>
+</html>
