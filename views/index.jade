@@ -8,7 +8,7 @@ block content
   form(action="/urls", method="post", name="form_url", class="col s12")
     .row
       .input-field.col.s4.col.s4
-      input(type="text", name="input_url", placeholder="Paste a link to shorten it", class="col s4 col s4")
+      input(type="text", name="input_url", placeholder="Paste a link to shorten it", class="col s4 col s4", value="#{typeof find_short_url != 'undefined' ? 'short.id/'+find_short_url: ''}")
       br
     .row
       .col.s4.col.s4
@@ -19,3 +19,17 @@ block content
     .row
       .input-field.col.s12
       input(type="submit", value="Shorten", class="btn waves-effect waves-light")
+  br
+  br
+  if typeof database != 'undefined'
+    div.col.s12
+      table.bordered.col.s4
+        tr
+          th#id ID
+          th#urls Urls
+          th#short_url short_url
+        - for (var i = 0 ; i < database.length ; i++ )
+          tr
+          td #{database[i].id}
+          td #{database[i].urls}
+          td short.id/#{database[i].short_url}

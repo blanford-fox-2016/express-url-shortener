@@ -3,9 +3,13 @@ var router = express.Router();
 let models = require('../models')
 let Urls = models.Url
 let sequelize = require('sequelize')
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Shorten URL' });
+  Urls.findAll().then((data) => {
+    res.render('index', { title: 'Shorten URL', database: data});
+  })
+  // res.render('index', { title: 'Shorten URL'})
 });
 
 let random_url = () => {
@@ -18,26 +22,52 @@ let random_url = () => {
 }
 
 router.post('/urls', (req, res,next) => {
-  let input_url = req.body.input_url
+  let input_url = req.body.input_url.toLowerCase()
+
   if(input_url === ''){
-    res.render('index', {title: 'Shorten URL', error: "Input must be filled"})
+    // res.render('index', {title: 'Shorten URL', error: "Input must be filled"})
+    Urls.findAll().then((all_data) => {
+      res.render('index', { title: 'Shorten URL', error: "Input must be filled", database: all_data});
+    })
   }else{
     Urls.beforeCreate(((url) => {
       url.short_url = random_url()
       return sequelize.Promise.resolve(url)
     }))
 
-    Urls.create({
-      urls: input_url
+    // console.log('test');
+
+    Urls.findOne({
+      where: {
+        urls: input_url
+      }
     }).then((data) => {
-      console.log(`Insert Data Success`);
-      console.log(data.short_url)
-      res.redirect(`/${data.short_url}`)
-    }).catch((err) => {
-      res.render('index', {title: 'Shorten URL', error: "Input must link"})
+      // res.render('index', {title: 'Shorten URL', find_short_url: data.short_url})
+      Urls.findAll().then((all_data) => {
+        console.log(data.short_url);
+        res.render('index', { title: 'Shorten URL', find_short_url: data.short_url, database: all_data});
+      })
+    }).catch(()=> {
+        Urls.create({
+          urls: input_url
+        }).then((new_data) => {
+          console.log(`Insert Data Success`);
+          console.log(new_data.short_url)
+          res.redirect(`/${new_data.short_url}`)
+        }).catch((err) => {
+          console.log(`not link`);
+          Urls.findAll().then((all_data) => {
+            res.render('index', { title: 'Shorten URL', error: "Input must link", database: all_data});
+          })
+          // res.render('index', {title: 'Shorten URL', error: "Input must link"})
+          // res.redirect('/')
+        })
     })
+
   }
 })
+
+
 
 router.get('/:short_urls', (req, res, next) => {
   res.redirect('/')
