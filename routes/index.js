@@ -6,4 +6,12 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+router.post('/urls', (req, res,next) => {
+
+})
+
+router.get('/:short_urls', (req, res, next) => {
+  
+})
+
 module.exports = router;
