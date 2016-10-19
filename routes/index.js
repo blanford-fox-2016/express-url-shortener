@@ -37,34 +37,38 @@ router.post('/urls', (req, res,next) => {
       return sequelize.Promise.resolve(url)
     }))
 
-
-    Urls.findOne({
-      where: {
-        urls: input_url
-      }
-    }).then((data) => {
-      res.render('index', {title: 'Shortener URL', find_short_url: data.short_url})
-      // Urls.findAll().then((all_data) => {
-      //   console.log(data.short_url);
-      //   res.render('index', { title: 'Shortener URL', find_short_url: data.short_url, database: all_data});
-      // })
-    }).catch(()=> {
-        Urls.create({
-          count: 0,
+    Urls.findAll().then((all_data) => {
+      Urls.findOne({
+        where: {
           urls: input_url
-        }).then((new_data) => {
-          console.log(`Insert Data Success`);
-          console.log(new_data.short_url)
-          res.redirect(`/`)
-        }).catch((err) => {
-          console.log(`not link`);
-          Urls.findAll().then((all_data) => {
-            res.render('index', { title: 'Shortener URL', error: "Input must link", database: all_data});
+        }
+      }).then((data) => {
+        res.render('index', {title: 'Shortener URL', find_short_url: data.short_url, database: all_data})
+        // Urls.findAll().then((all_data) => {
+        //   console.log(data.short_url);
+        //   res.render('index', { title: 'Shortener URL', find_short_url: data.short_url, database: all_data});
+        // })
+      }).catch(()=> {
+          Urls.create({
+            count: 0,
+            urls: input_url
+          }).then((new_data) => {
+            console.log(`Insert Data Success`);
+            console.log(new_data.short_url)
+            res.redirect(`/`)
+          }).catch((err) => {
+            console.log(`not link`);
+            Urls.findAll().then((all_data) => {
+              res.render('index', { title: 'Shortener URL', error: "Input must link", database: all_data});
+            })
+            // res.render('index', {title: 'Shortener URL', error: "Input must link"})
+            // res.redirect('/')
           })
-          // res.render('index', {title: 'Shortener URL', error: "Input must link"})
-          // res.redirect('/')
-        })
+      })
     })
+
+
+
 
   }
 })
