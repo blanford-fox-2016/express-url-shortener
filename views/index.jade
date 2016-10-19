@@ -1,5 +1,45 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  .top-bar
+      .top-bar-left
+        .row
+          ul.dropdown.menu(data-dropdown-menu)
+            li.menu-text iTamvan URLS
+            li
+              a(href="/links") Links
+  header.header.bg-primary
+    .row
+      h1.headline.c-white iTamvan URL Shortener
+      p.c-white iTamvan URL Shortener, make yoour links be shorter and simpler than ever.
+
+  .row
+    form(action='/' method='post')
+      .row
+        .large-12.columns
+          br
+          .row.collapse
+            .small-10.columns
+              input(type='text' name='orilink' placeholder='Insert your long URL')
+            .small-2.columns
+              button.button.postfix(href='#' type='submit') Make it short!
+          //- .label.c-black.bg-white Insert your URL
+          //- input(type='text' name='oriurl' placeholder='Insert the URL you want to be shortened')
+    hr
+  .row
+    table
+      thead
+        tr
+          th No
+          th Long URL
+          th Short URL
+          th Click Num
+      tbody
+        - for(var i = 0; i < data.length; i++)
+          tr
+            td= i+1
+            td
+             a.c-primary(href= data[i].originallink)= data[i].originallink
+            td
+             a.c-primary(href= data[i].shortlink)= data[i].shortlink
+            td= data[i].visitedtimes
