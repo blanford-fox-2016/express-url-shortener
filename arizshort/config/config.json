@@ -1,6 +1,0 @@
-{
-    "development": {
-        "storage": "db/shortener.db",
-        "dialect": "sqlite"
-    }
-}
