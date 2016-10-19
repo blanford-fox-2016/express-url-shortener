@@ -10,11 +10,19 @@ block content
           label(for='exampleInputUrl1') Input Url
           input#exampleInputUrl1.form-control(type='text', placeholder='Url to shorten', name='urltoshorten')
         button.btn.btn-primary(type='submit') Submit
+    br
+    br
     if dbcontent
-      p Link yang pernah di akses :
-      ul
-        each obj in dbcontent
-          li
-            | #{obj.link} shortened by cool to
-            a(href='/'+obj.name target='_blank')  cool/#{obj.name}
-            |||||||  click count : #{obj.click_count}
+    table.table.table-hover
+      thead
+        tr
+          th Link
+          th Short link
+          th click_count
+      each obj in dbcontent
+        tbody
+          tr
+            td #{obj.link}
+            td
+              a(href='/'+obj.name target='_blank') cool/#{obj.name}
+            td #{obj.click_count}
