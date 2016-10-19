@@ -20,7 +20,7 @@ router.post('/urls', function(req, res, next) {
   var dbcontent = []
   helper.shrink(req.body.urltoshorten, function(source, randomText) {
     short.create({
-      name: 'cool/'+randomText,
+      name: randomText,
       link: source,
       click_count: 0
     }).then(function(){
@@ -36,18 +36,26 @@ router.post('/urls', function(req, res, next) {
 
 
 router.get('/:urls', function(req, res, next) {
-  // console.log(req.params.urls);
-  // short.findOne({
-  //   where:{link: req.params.urls}
-  // }).then(function (data) {
-  //   var update_cc = data.dataValues.click_count + 1
-  //   short.update({
-  //     click_count: update_cc
-  //   }).then(function() {
-  //     res.redirect('/')
-  //   })
-  // })
-  res.send(`routing to ${req.params.id} does good`)
+  console.log(req.params.urls);
+  short.findOne({
+  where: {
+    name: req.params.urls
+  }
+}).then(function(result){
+  if (result){
+    var update_count = result.dataValues.click_count + 1
+    short.update({
+      click_count: update_count
+    }, {
+      where:{
+        id: result.dataValues.id
+      }
+  }).then(function(){
+    res.redirect(`http://${result.dataValues.link}`)
+  })
+} else { res.send('broken link')}
+})
+// res.send('its working')
 })
 
 module.exports = router;

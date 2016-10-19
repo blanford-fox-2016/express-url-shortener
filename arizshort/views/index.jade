@@ -16,5 +16,5 @@ block content
         each obj in dbcontent
           li
             | #{obj.link} shortened by cool to
-            a(href='/'+obj.link target='_blank')  #{obj.name}
+            a(href='/'+obj.name target='_blank')  cool/#{obj.name}
             |||||||  click count : #{obj.click_count}
