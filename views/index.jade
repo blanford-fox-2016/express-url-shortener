@@ -1,0 +1,43 @@
+extends layout
+
+block content
+  .container
+    h1= title
+    p Welcome to #{title}
+    br
+    br
+    .containter
+      form(action="/urls", method="post", name="form_url", class="col s12")
+        .row
+          .input-field.col.s4.col.s4
+          if typeof find_short_url == 'undefined'
+            input(type="text", name="input_url", placeholder="Paste a link to shorten it", class="col s4 col s4", value="#{typeof find_short_url != 'undefined' ? 'Your Link: enigmatic-eyrie-87689.herokuapp.com/'+find_short_url : ''}")
+          else
+            .col.s12
+              a(href="/#{find_short_url}", target="_blank") enigmatic-eyrie-87689.herokuapp.com/#{find_short_url}
+        .row
+          .col.s4.col.s4
+          if error
+            p.error.col.s4.col.s4 #{error}
+        .row
+          .input-field
+            if typeof find_short_url == 'undefined'
+              button(type="submit", value="Shorten", class="btn waves-effect waves-light", name="action") Shorten
+            else
+              a(href="/", class="btn waves-effect waves-light") Back
+    br
+    if (database.length > 0 && typeof database != "undefined")
+      .container
+        table.bordered.col.s4
+          tr
+            th#id ID
+            th#urls Urls
+            th#short_url short_url
+            th#count count
+          - for (var i = 0 ; i < database.length ; i++ )
+            tr
+            td #{database[i].id}
+            td #{database[i].urls}
+            td
+              a(href="/#{database[i].short_url}", target="_blank") enigmatic-eyrie-87689.herokuapp.com/#{database[i].short_url}
+            td #{database[i].count}
