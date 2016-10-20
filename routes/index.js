@@ -8,7 +8,9 @@ let sequelize = require('sequelize')
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  Urls.findAll().then((data) => {
+  Urls.findAll({
+    order : 'id DESC'
+  }).then((data) => {
     res.render('index', { title: 'Shortener URL', database: data});
   })
   // res.render('index', { title: 'Shorten URL'})
@@ -28,7 +30,9 @@ router.post('/urls', (req, res,next) => {
 
   if(input_url === ''){
     // res.render('index', {title: 'Shorten URL', error: "Input must be filled"})
-    Urls.findAll().then((all_data) => {
+    Urls.findAll({
+      order : 'id DESC'
+    }).then((all_data) => {
       res.render('index', { title: 'Shortener URL', error: "Input must be filled", database: all_data});
     })
   }else{
@@ -37,28 +41,27 @@ router.post('/urls', (req, res,next) => {
       return sequelize.Promise.resolve(url)
     }))
 
-    Urls.findAll().then((all_data) => {
+    Urls.findAll({
+      order : 'id DESC'
+    }).then((all_data) => {
       Urls.findOne({
         where: {
           urls: input_url
         }
       }).then((data) => {
         res.render('index', {title: 'Shortener URL', find_short_url: data.short_url, database: all_data})
-        // Urls.findAll().then((all_data) => {
-        //   console.log(data.short_url);
-        //   res.render('index', { title: 'Shortener URL', find_short_url: data.short_url, database: all_data});
-        // })
       }).catch(()=> {
           Urls.create({
             count: 0,
             urls: input_url
           }).then((new_data) => {
             console.log(`Insert Data Success`);
-            console.log(new_data.short_url)
+            // console.log(new_data.short_url)
             res.redirect(`/`)
           }).catch((err) => {
-            console.log(`not link`);
-            Urls.findAll().then((all_data) => {
+            Urls.findAll({
+              order : 'id DESC'
+            }).then((all_data) => {
               res.render('index', { title: 'Shortener URL', error: "Input must link", database: all_data});
             })
             // res.render('index', {title: 'Shortener URL', error: "Input must link"})
@@ -75,26 +78,32 @@ router.post('/urls', (req, res,next) => {
 
 router.get('/:short_urls', (req, res, next) => {
   console.log(req.params.short_urls);
-  if(typeof req.params.short_urls != 'undefined'){
-    Urls.findOne({
+  Urls.findOne({
+    where: {
+      short_url: req.params.short_urls
+    }
+  }).then((data) => {
+    data.count++
+    Urls.update({
+      count: data.count
+    },{
       where: {
-        short_url: req.params.short_urls
+        id: data.id
       }
-    }).then((data) => {
-      console.log(data.count);
-      data.count++
-      Urls.update({
-        count: data.count
-      },{
-        where: {
-          id: data.id
-        }
-      }).then((data_update) => {
-        // console.log(data_update);
-      })
-      res.redirect(`http://${data.urls}`)
     })
-  }
+    data.urls = data.urls.split('/')
+    //input https://.... / http://....
+    if(data.urls.length > 1){
+      for(var i = 2 ; i < data.urls.length-1; i++){
+        data.urls += data.urls[i] + '/'
+      }
+    }else{
+      data.urls = String(data.urls)
+    }
+
+    // console.log(data.urls);
+    res.redirect(`http://${data.urls}`)
+  })
 })
 
 module.exports = router;
