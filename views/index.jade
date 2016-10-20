@@ -14,7 +14,7 @@ block content
             input(type="text", name="input_url", placeholder="Paste a link to shorten it", class="col s4 col s4", value="#{typeof find_short_url != 'undefined' ? 'Your Link: enigmatic-eyrie-87689.herokuapp.com/'+find_short_url : ''}")
           else
             .col.s12
-              a(href="/#{find_short_url}") enigmatic-eyrie-87689.herokuapp.com/#{find_short_url}
+              a(href="/#{find_short_url}", target="_blank") enigmatic-eyrie-87689.herokuapp.com/#{find_short_url}
         .row
           .col.s4.col.s4
           if error
