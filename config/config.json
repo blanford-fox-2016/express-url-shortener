@@ -2,5 +2,13 @@
   "development": {
     "storage": "db/url.db",
     "dialect": "sqlite"
+  },
+  "test": {
+    "storage": "db/url.db",
+    "dialect": "sqlite"
+  },
+  "production": {
+    "storage": "db/url.db",
+    "dialect": "sqlite"
   }
 }
