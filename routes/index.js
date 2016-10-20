@@ -88,11 +88,15 @@ router.get('/:short_urls', (req, res, next) => {
     })
     data.urls = data.urls.split('/')
     //input https://.... / http://....
-    if(data.urls.length > 1){
+    if(data.urls[0] === 'http:' || data.urls[0] === 'https:'){
       data.urls.splice(0, 2)
-      data.urls = urls.join('/')
+      data.urls = data.urls.join('/')
     }else{
-      data.urls = String(data.urls)
+      if(data.urls.length > 1){
+        data.urls = data.urls.join('/')
+      }else{
+        data.urls = String(data.urls)
+      }
     }
 
     console.log(data.urls);
